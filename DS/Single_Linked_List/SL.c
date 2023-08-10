@@ -1,21 +1,18 @@
 /*
- File: 
- Author: 
- Created on 
- Description: 
+ File: SL.c
+ Author: Zeyad
+ Created on 7,August,2023 at 5:48 pm
+ Description: contain implementations of functions inside single linked list
 */
 
-/**************************************** INCLUDES ***************************************/
+/*******************************Includes***********************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include "SL.h"
-/**************************************** HELPER FUNCTION DECLARATION ********************/
 
 
-/*************************************** GLOBAL VARIABLE DEFINITION *********************/
+/***************************Function Definition******************************************/
 
-
-/*************************************** FUNCTION DEFINITION ****************************/
 void createList(List* pList)
 {
 	pList->head = NULL;
@@ -27,18 +24,7 @@ int listSize(List* pList)
 	return pList->size;
 }
 
-void printList(List* pList)
-{
-	Node* temp = pList->head;
-	while(temp!=NULL)
-	{
-		printf("%d ",temp->data);
-		temp = temp->next;
-	}
-    printf("\n");
-}
-
-void insertNode(List* pList,int pos,int val)
+void insertNode(List* pList,int pos,ListEntry val)
 {
   //step 1: Check Out Of Boundary Condition
   if(pos>pList->size)
@@ -91,12 +77,68 @@ void insertNode(List* pList,int pos,int val)
   pList->size ++;  
 }
 
-void deleteNode(List* pList,int pos)
+void printList(List* pList)
 {
-	//Put Your Code
+	Node* temp = pList->head;
+	while(temp!=NULL)
+	{
+		printf("%d ",temp->data);
+		temp = temp->next;
+	}
+    printf("\n");
 }
 
-/*************************************** ISR DEFINITION *********************************/    
 
+void deleteNode(List* pList,int pos)
+{
+  Node* temp1 = pList->head;
+  
+  if(pos >= pList->size)
+  {
+     printf("Error: Out Of Boundaries\n"); 
+     return;	 
+  }
+  else if(pos == 0)
+  {
+	//The deleted node at the beginning of list
+	pList->head = temp1->next;
+	free(temp1);
+  }
+  else
+  {
+	  //The deleted node at the end of list or at ith position
+	  int i = 0;
+	  for(i=0;i<pos-1;i++)
+	  {
+		  temp1 = temp1->next;
+	  }
+	  Node* temp2 = temp1->next;
+	  temp1->next = temp2-> next;
+      free(temp2);	  
+  }
+  pList->size --;
+}
 
-/*************************************** HELPER FUNCTION DEFINITION *********************/        
+void clearList(List* pList)
+{
+	Node*temp = pList->head;
+	while(temp!=NULL)
+	{
+		temp = temp->next;
+		free(pList->head);
+		pList->head = temp;
+		pList->size--;
+	}
+}
+
+bool searchNode(List * pList,ListEntry val)
+{
+   Node* temp = pList->head;
+   while(temp!=NULL)
+   {
+	   	if(temp->data == val)
+		   return true;
+	   temp = temp->next;
+   }   
+   return false;
+}
